@@ -1,4 +1,4 @@
-<section id="carrinho">
+<form id="carrinho">
     
     <span id="titulos">
         <h2>Carrinho</h2>
@@ -10,11 +10,24 @@
 
         <p id="nome-produto">Bola de basquete</p>
 
+        
+        <div class="quantidade">
+            <button type="button" class="btn-quantidade" aria-label="Diminuir">
+              -
+            </button>
+            <span class="valor-quantidade">1</span>
+            <button type="button" class="btn-quantidade" aria-label="Aumentar">
+              +
+            </button>
+        </div>
+
+
         <p id="produto">R$ 100,00</p>
     </div>
 
     <div id="valores">
-        <span id="valor-produto">
+        <span id="valor-quantidade">
+
             <p>Subtotal</p>
 
             <p>R$ 100,00</p>
@@ -38,4 +51,4 @@
 
         <button type="submit">Finalizar pedido</button>
     </div>
-</section>
+</form>
