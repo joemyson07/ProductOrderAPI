@@ -1,0 +1,46 @@
+
+#sobre {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-color: rgb(183, 194, 196);
+}
+
+
+.sobre-card {
+    width: 100%;
+    max-width: 900px;
+    padding: 40px;
+    background-color: #151a1771;
+    border: 2px solid #030503;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    color: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sobre-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+}
+
+.sobre-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.sobre-card p {
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    text-align: justify;
+}
+
+.sobre-card p:last-child {
+    margin-bottom: 0;
+}
