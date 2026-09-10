@@ -1,15 +1,13 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PedidoProduto, PedidoProdutoDetalhado, PedidoProdutoCreate } from '../../../core/domain/pedido-produto.model';
-import { ActivatedRoute } from '@angular/router';
-import { distinctUntilChanged, finalize, forkJoin, map, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { PedidoProdutoService } from '../../../core/services/pedido-produto.service';
+import { Component, DestroyRef, OnDestroy, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription, distinctUntilChanged, finalize, forkJoin, map } from 'rxjs';
+import { PedidoProduto, PedidoProdutoCreate, PedidoProdutoDetalhado } from '../../../core/domain/pedido-produto.model';
 import { Produto } from '../../../core/domain/produto.model';
+import { PedidoProdutoService } from '../../../core/services/pedido-produto.service';
 import { ProdutoService } from '../../../core/services/produto.service';
 import { obterMensagemApi } from '../../../core/utils/api-error.utils';
-import { OnInit, inject, DestroyRef, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-order-item',
@@ -242,6 +240,41 @@ export class OrderItemComponent implements OnInit, OnDestroy {
       subtotal: item.quantidade * Number(item.valor_unitario),
     }));
   }
-  
+  produtoEmAtualizacao: number | null = null;
+
+alterarQuantidade(item: PedidoProdutoDetalhado, delta: number): void {
+  this.limparMensagens();
+
+  if (this.idPedido === null || this.produtoEmAtualizacao !== null) {
+    return;
+  }
+
+  const novaQuantidade = item.quantidade + delta;
+
+  if (novaQuantidade < 1) {
+    return;
+  }
+
+  if (item.produto && novaQuantidade > item.produto.estoque) {
+    this.erro = `Quantidade maior que o estoque disponível (${item.produto.estoque}).`;
+    return;
+  }
+
+  this.produtoEmAtualizacao = item.idproduto;
+
+  this.subscriptions.add(
+    this.pedidoProdutoService
+      .atualizarQuantidade(this.idPedido, item.idproduto, novaQuantidade)
+      .pipe(finalize(() => (this.produtoEmAtualizacao = null)))
+      .subscribe({
+        next: () => {
+          this.carregarDados();
+        },
+        error: (error: unknown) => {
+          this.erro = obterMensagemApi(error);
+        },
+      }),
+  );
+}
   
 }

@@ -1,47 +1,115 @@
-<form id="carrinho">
-    <span id="titulos">
-        <h2>Carrinho</h2>
-        <p>0 itens</p>
-    </span>
+<form id="carrinho" [formGroup]="form" (ngSubmit)="adicionar()">
 
-    
-    <div class="cards">
+  <span id="titulos">
+    <h2>Carrinho</h2>
+    <p>{{ itensDetalhados.length }} {{ itensDetalhados.length === 1 ? 'item' : 'itens' }}</p>
+  </span>
 
+  @if (erro) {
+    <p class="mensagem-erro" role="alert">{{ erro }}</p>
+  }
+
+  @if (mensagem) {
+    <p class="mensagem-sucesso" role="status">{{ mensagem }}</p>
+  }
+
+  @if (carregando) {
+    <p>Carregando pedido...</p>
+  }
+
+  <!-- Adicionar produto -->
+  <div class="adicionar-produto">
+    <select formControlName="idproduto" aria-label="Produto">
+      <option [ngValue]="0" disabled>Selecione um produto</option>
+      @for (produto of produtos; track produto.idproduto) {
+        <option [ngValue]="produto.idproduto">
+          {{ produto.produto }} - R$ {{ +produto.valor_unitario | number:'1.2-2' }}
+        </option>
+      }
+    </select>
+
+    <input
+      type="number"
+      formControlName="quantidade"
+      min="1"
+      aria-label="Quantidade"
+    />
+
+    <button type="submit" [disabled]="form.invalid || salvando">
+      {{ salvando ? 'Adicionando...' : 'Adicionar' }}
+    </button>
+  </div>
+
+  <!-- Itens do carrinho -->
+  <div class="cards">
+    @if (itensDetalhados.length === 0 && !carregando) {
+      <p>Nenhum item no pedido.</p>
+    }
+
+    @for (item of itensDetalhados; track item.idproduto) {
+      <div class="card-item">
         <span class="item-detalhe">
-            <p id="nome-produto">Bola de basquete</p>
-            <p id="produto">R$ 100,00</p>
+          <p id="nome-produto">{{ item.produto?.produto ?? 'Produto indisponível' }}</p>
+          <p id="produto">R$ {{ +item.valor_unitario | number:'1.2-2' }}</p>
         </span>
-       
 
         <div class="quantidade">
-            <button type="button" (click)="remover(idproduto: number)" class="btn-quantidade" aria-label="Diminuir">-</button>
-            <span class="valor-quantidade">1</span>
-            <button type="button" class="btn-quantidade" aria-label="Aumentar">+</button>
+          <button
+            type="button"
+            class="btn-quantidade"
+            aria-label="Diminuir"
+            [disabled]="produtoEmAtualizacao === item.idproduto || item.quantidade <= 1"
+            (click)="alterarQuantidade(item, -1)"
+          >-</button>
+
+          <span class="valor-quantidade">{{ item.quantidade }}</span>
+
+          <button
+            type="button"
+            class="btn-quantidade"
+            aria-label="Aumentar"
+            [disabled]="produtoEmAtualizacao === item.idproduto || (item.produto ? item.quantidade >= item.produto.estoque : false)"
+            (click)="alterarQuantidade(item, 1)"
+          >+</button>
+
+          <p class="subtotal">Subtotal: R$ {{ item.subtotal | number:'1.2-2' }}</p>
+
+          <button
+            type="button"
+            class="btn-remover"
+            [disabled]="produtoEmRemocao === item.idproduto"
+            (click)="remover(item.idproduto)"
+          >
+            {{ produtoEmRemocao === item.idproduto ? 'Removendo...' : 'Remover' }}
+          </button>
         </div>
-    </div>
+      </div>
+    }
+  </div>
 
-    <div id="valores">
-       
+  <!-- Totais -->
+  <div id="valores">
+    <span id="valor-quantidade">
+      <p>Subtotal</p>
+      <p>R$ {{ totalPedido | number:'1.2-2' }}</p>
+    </span>
 
-        <span id="valor-quantidade">
-            <p>Subtotal</p>
-            <p>R$ 100,00</p>
-        </span>
-        
-        <span id="frete">
-            <p>Frete</p>
-            <span id="gratis">
-                <p>Grátis</p>
-            </span>
-        </span>
+    <span id="frete">
+      <p>Frete</p>
+      <span id="gratis">
+        <p>Grátis</p>
+      </span>
+    </span>
 
-        <hr>
+    <hr />
 
-        <span id="Total"> 
-            <h3>Total</h3>
-            <p>R$ 100,00</p>
-        </span>
+    <span id="Total">
+      <h3>Total</h3>
+      <p>R$ {{ totalPedido | number:'1.2-2' }}</p>
+    </span>
 
-        <button type="submit" id="finalizar">Finalizar pedido</button>
-    </div>
+    <button type="button" id="finalizar" [disabled]="itensDetalhados.length === 0">
+      Finalizar pedido
+    </button>
+  </div>
 </form>
