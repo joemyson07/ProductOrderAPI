@@ -5,5 +5,6 @@ import { Component } from '@angular/core';
   selector: 'app-sobre',
   styleUrl: './sobre.css',
   templateUrl: './sobre.html',
+  standalone: true
 })
 export class Sobre {}
