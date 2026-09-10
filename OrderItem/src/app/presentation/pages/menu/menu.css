@@ -13,6 +13,7 @@
   --border: #dddddd;
 }
 
+
 /* CABEÇALHO */
 #cabecalho {
   width: 100%;
@@ -146,13 +147,14 @@
 #login-cadastro span {
   font-size: 13px;
 
+  font-weight: bold;
   color: var(--text);
 
   margin-bottom: 4px;
 }
 
 #login-cadastro strong {
-  font-size: 16px;
+  font-size: 14px;
 
   color: var(--dark);
 
@@ -161,8 +163,13 @@
   transition: 0.3s;
 }
 
+#login-cadastro span:hover {
+  transform: scale(1.2);
+}
+
 #login-cadastro strong:hover {
   color: var(--primary);
+  transform: scale(1.2);
 }
 
 /* CARRINHO */
