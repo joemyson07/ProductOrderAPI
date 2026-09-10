@@ -1,14 +1,13 @@
-import { Component } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PedidoProduto, PedidoProdutoDetalhado, PedidoProdutoCreate } from '../../../core/domain/pedido-produto.model';
-import { ActivatedRoute } from '@angular/router';
-import { distinctUntilChanged, finalize, forkJoin, map, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { PedidoProdutoService } from '../../../core/services/pedido-produto.service';
+import { Component, DestroyRef, OnDestroy, OnInit, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription, distinctUntilChanged, finalize, forkJoin, map } from 'rxjs';
+import { PedidoProduto, PedidoProdutoCreate, PedidoProdutoDetalhado } from '../../../core/domain/pedido-produto.model';
 import { Produto } from '../../../core/domain/produto.model';
+import { PedidoProdutoService } from '../../../core/services/pedido-produto.service';
 import { ProdutoService } from '../../../core/services/produto.service';
 import { obterMensagemApi } from '../../../core/utils/api-error.utils';
-import { OnInit, inject, DestroyRef, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-order-item',
@@ -20,7 +19,7 @@ import { OnInit, inject, DestroyRef, OnDestroy } from '@angular/core';
 export class OrderItemComponent implements OnInit, OnDestroy {
 
 
-
+  private readonly route = inject(ActivatedRoute);
   private readonly pedidoProdutoService = inject(PedidoProdutoService);
 
   private readonly produtoService = inject(ProdutoService);
