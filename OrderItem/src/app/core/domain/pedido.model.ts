@@ -1,4 +1,4 @@
-export interface Pedidio {
+export interface Pedido {
     idpedido: number;
     idpessoa: number;
     data_pedido: Date;
