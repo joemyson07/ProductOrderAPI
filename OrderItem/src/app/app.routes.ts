@@ -1,11 +1,31 @@
 import { Routes } from '@angular/router';
+import { Tela } 
+import { Sobre } 
 
 export const routes: Routes = [
-  {
-    path: 'pedidos/:idpedido/itens',
-    loadComponent: () =>
-      import('./order-item/presentation/order-item.component').then(
-        (module) => module.OrderItemComponent
-      ),
-  },
+
+    {
+        path:"",
+        redirectTo: "tela-inicial",
+        pathMatch: "full",
+
+    },
+
+    { 
+        path: "tela-inicial",
+        component: TelaInicial },
+
+    { 
+        path: "sobre",
+        component: Sobre },
+
+    { 
+        path: "carrinho",
+        component: Sobre },
+
+    { 
+        path: "login",
+        component: Sobre },
+        
+
 ];
