@@ -1,6 +1,10 @@
 import { Routes } from '@angular/router';
-import { Tela } 
-import { Sobre } 
+
+import { Login } from './presentation/pages/login/login';
+import { Sobre } from './presentation/pages/sobre/sobre'; 
+import { TelaInicial } from './presentation/pages/tela-inicial/tela-inicial'; 
+import { OrderItemComponent } from './presentation/features/order-item/order-item.component';
+
 
 export const routes: Routes = [
 
@@ -21,11 +25,11 @@ export const routes: Routes = [
 
     { 
         path: "carrinho",
-        component: Sobre },
+        component: OrderItemComponent },
 
     { 
         path: "login",
-        component: Sobre },
+        component: Login },
         
 
 ];
