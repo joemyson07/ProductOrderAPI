@@ -27,6 +27,10 @@ export const routes: Routes = [
         component: TelaInicial },
 
     { 
+        path: "login",
+        component: Login },
+
+    { 
         path: "sobre",
         component: Sobre },
 
