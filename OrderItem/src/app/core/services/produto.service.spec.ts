@@ -5,6 +5,7 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { API_BASE_URL } from '../config/api.config';
+import { Produto } from '../domain/produto.model';
 import { ProdutoService } from './produto.service';
 
 describe('ProdutoService', () => {
@@ -27,6 +28,25 @@ describe('ProdutoService', () => {
   afterEach(() => http.verify());
 
   it('deve listar produtos', () => {
-    expect(service).toBeTruthy();
+    const produtos: Produto[] = [
+      {
+        idproduto: 7,
+        idsetor:2,
+        produto: 'Tênis',
+        descricao_produto: 'Corrida',
+        valor_unitario: '299.90',
+        unidade: 'UN',
+        estoque: 12,
+      },
+    ];
+
+    service.listar().subscribe((resultado) => {
+      expect(resultado).toEqual(produtos);
+    });
+
+    const request = http.expectOne('/api/produtos/');
+    expect(request.request.method).toBe('GET');
+    request.flush(produtos);
+
   });
 });
