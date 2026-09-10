@@ -19,6 +19,16 @@ export class PedidoProdutoService {
     return this.http.post<PedidoProduto>(
       `${this.apiBaseUrl}/pedidos/${idpedido}/produtos`, dados);
   }
+  atualizarQuantidade(
+    idpedido: number,
+    idproduto: number,
+    quantidade: number,
+  ): Observable<PedidoProduto> {
+    return this.http.patch<PedidoProduto>(
+      `${this.apiBaseUrl}/pedidos/${idpedido}/produtos/${idproduto}`,
+      { quantidade },
+    );
+  }
 
   remover(idpedido: number, idproduto: number): Observable<void> {
     return this.http.delete<void>(
