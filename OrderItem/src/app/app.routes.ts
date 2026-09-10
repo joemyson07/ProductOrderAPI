@@ -7,7 +7,7 @@ export const routes: Routes = [
   {
     path:"",
     redirectTo: "tela-inicial",
-    pathMatch: "full"
+    pathMatch: "full",
   },
   {
     path:"tela-inical",
