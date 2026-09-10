@@ -1,1 +1,145 @@
-/* alô, faz o push */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+:root {
+  --vermelho: #e70013;
+  --preto: #000000;
+  --branco: #fff;
+}
+
+#carrinho {
+  max-width: 350px;
+  margin: 25px auto;
+  padding: 20px;
+  background-color: var(--branco);
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+}
+
+#titulos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+#titulos h2 {
+  color: var(--preto);
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+#titulos p {
+  color: #666;
+  font-size: 14px;
+}
+
+
+.cards {
+  width: 100%;
+  min-height: 220px;
+  background-color: #fafafa;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end; 
+}
+
+.quantidade {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn-quantidade {
+  background-color: var(--branco);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+
+.item-detalhe{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+  color: var(--preto);
+  margin-bottom: 10px;
+}
+
+#nome-produto,
+#produto {
+  font-weight: 700;
+  font-size: 18px;
+  margin: 8px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+#nome-produto{
+    color: orange;
+}
+
+
+#valores span {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 8px 0;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 12px 0;
+}
+
+#gratis p,
+#Total p {
+  color: rgb(105, 202, 7);
+  font-weight: bold;
+}
+
+#Total h3 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+#carrinho button[type="submit"] {
+  background-color: black;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 12px 24px;
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 15px;
+}
+
+#carrinho button[type="submit"]:hover {
+  background-color: dimgray;
+}
+
+
+
+
+

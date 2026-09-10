@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PedidoProduto, PedidoProdutoDetalhado, PedidoProdutoCreate } from '../../../core/domain/pedido-produto.model';
 import { ActivatedRoute } from '@angular/router';
@@ -13,7 +14,7 @@ import { OnInit, inject, DestroyRef, OnDestroy } from '@angular/core';
 @Component({
   selector: 'app-order-item',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './order-item.component.html',
   styleUrl: './order-item.component.css'
 })
@@ -241,5 +242,6 @@ export class OrderItemComponent implements OnInit, OnDestroy {
       subtotal: item.quantidade * Number(item.valor_unitario),
     }));
   }
+  
   
 }
