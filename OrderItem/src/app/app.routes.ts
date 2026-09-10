@@ -10,6 +10,7 @@ import { CamisetasComponent } from './presentation/pages/sessoes/camisetas/camis
 import { EquipamentosComponent } from './presentation/pages/sessoes/equipamentos/equipamentos.component';
 import { ManguitosComponent } from './presentation/pages/sessoes/manguitos/manguitos.component';
 import { ShortsComponent } from './presentation/pages/sessoes/shorts/shorts.component';
+import { TodosComponent } from './presentation/pages/sessoes/todos/todos.component';
 
 
 export const routes: Routes = [
@@ -56,5 +57,9 @@ export const routes: Routes = [
     { 
         path: "shorts",
         component: ShortsComponent },
+    
+    { 
+        path: "todos",
+        component: TodosComponent },
 
 ];
