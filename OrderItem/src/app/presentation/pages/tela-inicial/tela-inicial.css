@@ -1,0 +1,312 @@
+/* ==========================================================================
+   CONFIGURAÇÕES GERAIS E RESET DE ESTILOS
+   ========================================================================== */
+:host {
+  display: block;
+  width: 100%;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #111111;
+  background-color: #ffffff;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   1. FAIXA DE ANÚNCIOS / NOVIDADES
+   ========================================================================== */
+.banner-aviso {
+  width: 100%;
+  background-color: #f5f5f5;
+  text-align: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.banner-aviso p {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  color: #333333;
+}
+
+.banner-aviso span {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.banner-aviso a {
+  color: #111111;
+  font-weight: 700;
+  text-decoration: underline;
+  margin-left: 5px;
+}
+
+.banner-aviso a:hover {
+  color: #555555;
+}
+
+/* ==========================================================================
+   2. HERO BANNER PRINCIPAL (DESTAQUE E LARGURA TOTAL)
+   ========================================================================== */
+.hero-banner {
+  width: 100%;
+  min-height: 520px;
+  height: 70vh;
+  background-image: url('https://images.unsplash.com/photo-1517649763962-0c623266ddc0?auto=format&fit=crop&q=80&w=1600');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 60px;
+}
+
+.hero-overlay {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.75) 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-content h1 {
+  color: #ffffff;
+  font-size: 2.8rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  margin: 0 0 12px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content p {
+  color: #f0f0f0;
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin: 0 0 24px 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.btn-primary {
+  background-color: #ffffff;
+  color: #111111;
+  border: 1px solid #ffffff;
+  padding: 14px 32px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 30px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.25s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
+
+/* ==========================================================================
+   3. GRADE DE CATEGORIAS (3 COLUNAS LADO A LADO)
+   ========================================================================== */
+.secao-categorias {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 80px 20px;
+}
+
+.titulo-secao {
+  font-size: 1.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  margin-bottom: 28px;
+  color: #111111;
+}
+
+.grid-categorias {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.card-categoria {
+  cursor: pointer;
+}
+
+.imagem-wrapper {
+  width: 100%;
+  height: 380px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.imagem-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.card-categoria:hover .imagem-wrapper img {
+  transform: scale(1.05);
+}
+
+.card-categoria h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 14px;
+  margin-bottom: 0;
+  color: #111111;
+}
+
+/* ==========================================================================
+   4. RODAPÉ DA LOJA
+   ========================================================================== */
+.rodape {
+  background-color: #ffffff;
+  border-top: 1px solid #e5e5e5;
+  padding-top: 60px;
+  width: 100%;
+}
+
+.rodape-conteudo {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 50px 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+.coluna-rodape h4 {
+  color: #111111;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.coluna-rodape ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.coluna-rodape li {
+  margin-bottom: 12px;
+}
+
+.coluna-rodape a {
+  color: #666666;
+  text-decoration: none;
+  font-size: 0.88rem;
+  transition: color 0.2s ease;
+}
+
+.coluna-rodape a:hover {
+  color: #111111;
+}
+
+.coluna-rodape p {
+  color: #666666;
+  font-size: 0.88rem;
+  margin: 0 0 8px 0;
+}
+
+.texto-atendimento {
+  font-size: 0.8rem;
+  color: #888888;
+  line-height: 1.4;
+}
+
+.rodape-inferior {
+  border-top: 1px solid #eeeeee;
+  background-color: #fafafa;
+  padding: 24px 20px;
+}
+
+.rodape-inferior-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.78rem;
+  color: #777777;
+}
+
+.links-legais a {
+  color: #777777;
+  text-decoration: none;
+  margin-right: 20px;
+  transition: color 0.2s ease;
+}
+
+.links-legais a:hover {
+  color: #111111;
+}
+
+.copyright {
+  color: #777777;
+}
+
+/* ==========================================================================
+   5. RESPONSIVIDADE (DISPOSITIVOS MÓVEIS E TABLETS)
+   ========================================================================== */
+@media (max-width: 900px) {
+  .grid-categorias {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .rodape-conteudo {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid-categorias {
+    grid-template-columns: 1fr;
+  }
+  
+  .rodape-conteudo {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero-banner {
+    min-height: 400px;
+    height: 55vh;
+  }
+  
+  .hero-content h1 {
+    font-size: 1.6rem;
+  }
+  
+  .rodape-inferior-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
