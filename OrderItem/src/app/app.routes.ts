@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Sobre } from './presentation/pages/sobre/sobre';
 import { TelaInicial } from './presentation/pages/tela-inicial/tela-inicial';
 import { Login } from './presentation/pages/login/login';
+import { OrderItemComponent } from './presentation/features/order-item/order-item.component';
 
 export const routes: Routes = [
   {
@@ -24,5 +25,5 @@ export const routes: Routes = [
   {
     path:"login",
     component:Login
-  }
+  },
 ];
