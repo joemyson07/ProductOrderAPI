@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 
 from schemas.pedidoproduto_schema import (
-    PedidoProdutoCreate
+    PedidoProdutoCreate,
+    PedidoProdutoUpdate
 )
 
 from services.pedidoproduto_service import (
@@ -26,6 +27,18 @@ class PedidoProdutoController:
     ):
         return self.service.listar_por_pedido(
             idpedido
+        )
+
+    def atualizar_quantidade(
+        self,
+        idpedido: int,
+        idproduto: int,
+        dados: PedidoProdutoUpdate
+    ):
+        return self.service.atualizar_quantidade(
+            idpedido,
+            idproduto,
+            dados
         )
 
     def remover(
