@@ -4,7 +4,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Playfair Display', serif;
 }
 
 :root {
@@ -38,31 +38,49 @@
 
 #titulos p {
   color: #666;
-  font-size: 14px;
+  font-size: 20.2px;
 }
 
 .select-idproduto{
-  padding: 6px 35px;
+  padding: 6px 5px 8px; 
   background-color: #000000;
   color: white;
   border: dimgray solid 1.5px;
   border-radius: 5.5px;
-  margin: 10px 20px;
-}
-
-.option-idproduto{
-  
+  margin: 10px 5px;
+  width: 95%;
 }
 
 .adicionar-produto input[type="number"]{
-  margin: 10px 21px;
-  padding: 5px 10px;
-  color: #000000;
+  width: 95%;
+  margin: 0px 5px;
+  padding: 5px ;
+  color: white;
   background-color: #666;
+  border: solid 2.5px white;
+  border-radius: 6px;
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
 
+.adicionar-produto input[type="number"]::-webkit-inner-spin-button,.adicionar-produto[type="number"]::-webkit-outer-spin-button{
+-webkit-appearance: none;
+margin: 0;
+}
+
+.adicionar-produto button[type="submit"]{
+  padding: 15px;
+  margin: 15px 0.9px;
+  background-color: #000000;
+  color: white;
+  border: solid 2px black;
+  border-radius: 3.5px;
+  font-size: 1.04em;
+  width: 95%;
+}
 
 .cards {
+  margin-left: 0px;
   width: 100%;
   min-height: 220px;
   background-color: #fafafa;
