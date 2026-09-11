@@ -1,7 +1,7 @@
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 import { PedidoProduto } from '../../../core/domain/pedido-produto.model';
 import { Pedido } from '../../../core/domain/pedido.model';
@@ -19,6 +19,7 @@ describe('OrderItemComponent', () => {
   let produtoService: jasmine.SpyObj<ProdutoService>;
   let pedidoProdutoService: jasmine.SpyObj<PedidoProdutoService>;
   let pedidoService: jasmine.SpyObj<PedidoService>;
+  let router: jasmine.SpyObj<Router>;
 
   const pedido: Pedido = {
     idpedido: 10,
@@ -59,9 +60,12 @@ describe('OrderItemComponent', () => {
       ['listarPorPedido', 'adicionar', 'atualizarQuantidade', 'remover'],
     );
     pedidoService = jasmine.createSpyObj<PedidoService>('PedidoService', [
+      'criar',
       'buscarPorId',
       'atualizar',
     ]);
+    router = jasmine.createSpyObj<Router>('Router', ['navigate']);
+    router.navigate.and.resolveTo(true);
 
     await TestBed.configureTestingModule({
       imports: [OrderItemComponent],
@@ -69,6 +73,7 @@ describe('OrderItemComponent', () => {
         { provide: ProdutoService, useValue: produtoService },
         { provide: PedidoProdutoService, useValue: pedidoProdutoService },
         { provide: PedidoService, useValue: pedidoService },
+        { provide: Router, useValue: router },
         {
           provide: ActivatedRoute,
           useValue: {
@@ -182,5 +187,21 @@ describe('OrderItemComponent', () => {
       status_pedido: 'F',
     });
     expect(component.pedidoFinalizado).toBeTrue();
+  });
+
+  it('deve criar um carrinho para uma pessoa existente', () => {
+    pedidoService.criar.and.returnValue(of({ ...pedido, idpedido: 11 }));
+    criarComItens();
+    component.idPessoaNovoPedido = 1;
+
+    component.criarPedido();
+
+    expect(pedidoService.criar).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        idpessoa: 1,
+        status_pedido: 'A',
+      }),
+    );
+    expect(router.navigate).toHaveBeenCalledWith(['/carrinho', 11]);
   });
 });
