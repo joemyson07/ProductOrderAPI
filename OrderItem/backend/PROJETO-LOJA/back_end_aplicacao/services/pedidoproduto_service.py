@@ -10,7 +10,8 @@ from repositories.pedidoproduto_repository import (
 )
 
 from schemas.pedidoproduto_schema import (
-    PedidoProdutoCreate
+    PedidoProdutoCreate,
+    PedidoProdutoUpdate
 )
 
 
@@ -98,6 +99,50 @@ class PedidoProdutoService:
             idpedido
         )
 
+    def atualizar_quantidade(
+        self,
+        idpedido: int,
+        idproduto: int,
+        dados: PedidoProdutoUpdate
+    ):
+
+        item = self.repository.buscar(
+            idpedido,
+            idproduto
+        )
+
+        if not item:
+
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Produto não encontrado no pedido"
+            )
+
+        produto = self.produto_repository.buscar_por_id(
+            idproduto
+        )
+
+        if not produto:
+
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Produto não encontrado"
+            )
+
+        diferenca = dados.quantidade - item.quantidade
+
+        if diferenca > produto.estoque:
+
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Estoque insuficiente"
+            )
+
+        produto.estoque -= diferenca
+        item.quantidade = dados.quantidade
+
+        return self.repository.atualizar(item)
+
     def remover(
         self,
         idpedido: int,
@@ -115,5 +160,18 @@ class PedidoProdutoService:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Produto não encontrado no pedido"
             )
+
+        produto = self.produto_repository.buscar_por_id(
+            idproduto
+        )
+
+        if not produto:
+
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Produto não encontrado"
+            )
+
+        produto.estoque += item.quantidade
 
         self.repository.remover(item)
