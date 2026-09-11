@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription, distinctUntilChanged, finalize, forkJoin, map } from 'rxjs';
 import { PedidoProduto, PedidoProdutoCreate, PedidoProdutoDetalhado } from '../../../core/domain/pedido-produto.model';
 import { Pedido } from '../../../core/domain/pedido.model';
@@ -22,6 +22,7 @@ import { obterMensagemApi } from '../../../core/utils/api-error.utils';
 })
 export class OrderItemComponent implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly pedidoAtivoService = inject(PedidoAtivoService);
   private readonly pedidoProdutoService = inject(PedidoProdutoService);
   private readonly pedidoService = inject(PedidoService);
@@ -41,10 +42,12 @@ export class OrderItemComponent implements OnInit, OnDestroy {
   carregando = false;
   salvando = false;
   finalizando = false;
+  criandoPedido = false;
   produtoEmRemocao: number | null = null;
   produtoEmAtualizacao: number | null = null;
   erro: string | null = null;
   mensagem: string | null = null;
+  idPessoaNovoPedido = 0;
 
   readonly form = this.formBuilder.nonNullable.group({
     idproduto: [0, [Validators.required, Validators.min(1)]],
@@ -112,6 +115,40 @@ export class OrderItemComponent implements OnInit, OnDestroy {
             if (error instanceof HttpErrorResponse && error.status === 404) {
               this.pedidoAtivoService.limpar();
             }
+            this.erro = obterMensagemApi(error);
+          },
+        }),
+    );
+  }
+
+  criarPedido(): void {
+    this.limparMensagens();
+
+    if (
+      !Number.isInteger(this.idPessoaNovoPedido) ||
+      this.idPessoaNovoPedido <= 0 ||
+      this.criandoPedido
+    ) {
+      this.erro = 'Informe um identificador de pessoa válido.';
+      return;
+    }
+
+    this.criandoPedido = true;
+
+    this.subscriptions.add(
+      this.pedidoService
+        .criar({
+          idpessoa: this.idPessoaNovoPedido,
+          data_pedido: this.obterDataLocal(),
+          status_pedido: 'A',
+        })
+        .pipe(finalize(() => (this.criandoPedido = false)))
+        .subscribe({
+          next: (pedido) => {
+            this.pedidoAtivoService.definir(pedido.idpedido);
+            void this.router.navigate(['/carrinho', pedido.idpedido]);
+          },
+          error: (error: unknown) => {
             this.erro = obterMensagemApi(error);
           },
         }),
@@ -311,7 +348,6 @@ export class OrderItemComponent implements OnInit, OnDestroy {
 
     if (idPedido === null) {
       this.limparEstado();
-      this.erro = 'Nenhum pedido ativo. Acesse /carrinho/{idpedido} com um pedido existente.';
       return;
     }
 
@@ -345,5 +381,13 @@ export class OrderItemComponent implements OnInit, OnDestroy {
       produto: produtosPorId.get(item.idproduto) ?? null,
       subtotal: item.quantidade * Number(item.valor_unitario),
     }));
+  }
+
+  private obterDataLocal(): string {
+    const data = new Date();
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    const dia = String(data.getDate()).padStart(2, '0');
+    return `${ano}-${mes}-${dia}`;
   }
 }

@@ -17,6 +17,23 @@
     <p class="mensagem-sucesso" role="status">{{ mensagem }}</p>
   }
 
+  @if (idPedido === null) {
+    <div class="adicionar-produto">
+      <label for="idpessoa">Pessoa do pedido</label>
+      <input
+        id="idpessoa"
+        name="idpessoa"
+        type="number"
+        min="1"
+        [(ngModel)]="idPessoaNovoPedido"
+        [ngModelOptions]="{ standalone: true }"
+      />
+      <button type="button" [disabled]="criandoPedido" (click)="criarPedido()">
+        {{ criandoPedido ? 'Criando pedido...' : 'Criar carrinho' }}
+      </button>
+    </div>
+  }
+
   @if (carregando) {
     <p>Carregando pedido...</p>
   }
@@ -40,7 +57,7 @@
       [attr.disabled]="pedidoFinalizado ? true : null"
     />
 
-    <button type="submit" [disabled]="form.invalid || salvando || pedidoFinalizado">
+    <button type="submit" [disabled]="idPedido === null || form.invalid || salvando || pedidoFinalizado">
       {{ salvando ? 'Adicionando...' : 'Adicionar' }}
     </button>
   </div>
