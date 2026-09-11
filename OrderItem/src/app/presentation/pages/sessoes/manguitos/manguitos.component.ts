@@ -28,7 +28,7 @@ produtos: any[] = [];
       .subscribe({
 
         next: (dados) => {
-          this.produtos = dados.filter(produtos => produtos.idsetor === 2);
+          this.produtos = dados.filter(produtos => produtos.idsetor === 5);
           this.carregando = false;
         },
 
