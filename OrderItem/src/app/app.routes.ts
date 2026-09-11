@@ -38,6 +38,14 @@ export const routes: Routes = [
         path: "carrinho",
         component: OrderItemComponent },
 
+    {
+        path: "carrinho/:idpedido",
+        component: OrderItemComponent },
+
+    {
+        path: "pedidos/:idpedido/itens",
+        redirectTo: "carrinho/:idpedido" },
+
     { 
         path: "calcados",
         component: CalcadosComponent },

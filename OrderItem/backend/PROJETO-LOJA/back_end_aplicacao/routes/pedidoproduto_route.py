@@ -9,7 +9,8 @@ from database import get_db
 
 from schemas.pedidoproduto_schema import (
     PedidoProdutoCreate,
-    PedidoProdutoResponse
+    PedidoProdutoResponse,
+    PedidoProdutoUpdate
 )
 
 
@@ -48,6 +49,25 @@ def listar_produtos(
     controller = PedidoProdutoController(db)
 
     return controller.listar_por_pedido(idpedido)
+
+
+@router.patch(
+    "/{idpedido}/produtos/{idproduto}",
+    response_model=PedidoProdutoResponse
+)
+def atualizar_quantidade(
+    idpedido: int,
+    idproduto: int,
+    dados: PedidoProdutoUpdate,
+    db: Session = Depends(get_db)
+):
+    controller = PedidoProdutoController(db)
+
+    return controller.atualizar_quantidade(
+        idpedido,
+        idproduto,
+        dados
+    )
 
 
 @router.delete(

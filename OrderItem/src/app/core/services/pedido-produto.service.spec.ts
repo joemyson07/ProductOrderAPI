@@ -72,4 +72,18 @@ describe('PedidoProdutoService', () => {
     expect(request.request.method).toBe('DELETE');
     request.flush(null, { status: 204, statusText: 'No Content' });
   });
+
+  it('deve atualizar a quantidade de um item', () => {
+    service.atualizarQuantidade(10, 7, 4).subscribe();
+
+    const request = http.expectOne('/api/pedidos/10/produtos/7');
+    expect(request.request.method).toBe('PATCH');
+    expect(request.request.body).toEqual({ quantidade: 4 });
+    request.flush({
+      idpedido: 10,
+      idproduto: 7,
+      quantidade: 4,
+      valor_unitario: '299.90',
+    });
+  });
 });

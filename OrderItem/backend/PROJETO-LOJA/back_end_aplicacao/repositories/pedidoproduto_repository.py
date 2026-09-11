@@ -42,6 +42,13 @@ class PedidoProdutoRepository:
             .all()
         )
 
+    def atualizar(self, item: PedidoProduto):
+
+        self.db.commit()
+        self.db.refresh(item)
+
+        return item
+
     def remover(self, item: PedidoProduto):
 
         self.db.delete(item)

@@ -5,6 +5,10 @@
     <p>{{ itensDetalhados.length }} {{ itensDetalhados.length === 1 ? 'item' : 'itens' }}</p>
   </span>
 
+  @if (pedido) {
+    <p>Pedido #{{ pedido.idpedido }} · Status: {{ pedido.status_pedido }}</p>
+  }
+
   @if (erro) {
     <p class="mensagem-erro" role="alert">{{ erro }}</p>
   }
@@ -13,13 +17,30 @@
     <p class="mensagem-sucesso" role="status">{{ mensagem }}</p>
   }
 
+  @if (idPedido === null) {
+    <div class="adicionar-produto">
+      <label for="idpessoa">Pessoa do pedido</label>
+      <input
+        id="idpessoa"
+        name="idpessoa"
+        type="number"
+        min="1"
+        [(ngModel)]="idPessoaNovoPedido"
+        [ngModelOptions]="{ standalone: true }"
+      />
+      <button type="button" [disabled]="criandoPedido" (click)="criarPedido()">
+        {{ criandoPedido ? 'Criando pedido...' : 'Criar carrinho' }}
+      </button>
+    </div>
+  }
+
   @if (carregando) {
     <p>Carregando pedido...</p>
   }
 
   <!-- Adicionar produto -->
   <div class="adicionar-produto">
-    <select formControlName="idproduto" class="select-idproduto" aria-label="Produto">
+    <select formControlName="idproduto" class="select-idproduto" aria-label="Produto" [attr.disabled]="pedidoFinalizado ? true : null">
       <option [ngValue]="0" class="option-idproduto" disabled>Selecione um produto</option>
       @for (produto of produtos; track produto.idproduto) {
         <option [ngValue]="produto.idproduto">
@@ -33,9 +54,10 @@
       formControlName="quantidade"
       min="1"
       aria-label="Quantidade"
+      [attr.disabled]="pedidoFinalizado ? true : null"
     />
 
-    <button type="submit" [disabled]="form.invalid || salvando">
+    <button type="submit" [disabled]="idPedido === null || form.invalid || salvando || pedidoFinalizado">
       {{ salvando ? 'Adicionando...' : 'Adicionar' }}
     </button>
   </div>
@@ -58,7 +80,7 @@
             type="button"
             class="btn-quantidade"
             aria-label="Diminuir"
-            [disabled]="produtoEmAtualizacao === item.idproduto || item.quantidade <= 1"
+            [disabled]="pedidoFinalizado || produtoEmAtualizacao === item.idproduto || item.quantidade <= 1"
             (click)="alterarQuantidade(item, -1)"
           >-</button>
 
@@ -68,7 +90,7 @@
             type="button"
             class="btn-quantidade"
             aria-label="Aumentar"
-            [disabled]="produtoEmAtualizacao === item.idproduto || (item.produto ? item.quantidade >= item.produto.estoque : false)"
+            [disabled]="pedidoFinalizado || produtoEmAtualizacao === item.idproduto || (item.produto ? item.produto.estoque <= 0 : true)"
             (click)="alterarQuantidade(item, 1)"
           >+</button>
 
@@ -77,7 +99,7 @@
           <button
             type="button"
             class="btn-remover"
-            [disabled]="produtoEmRemocao === item.idproduto"
+            [disabled]="pedidoFinalizado || produtoEmRemocao === item.idproduto"
             (click)="remover(item.idproduto)"
           >
             {{ produtoEmRemocao === item.idproduto ? 'Removendo...' : 'Remover' }}
@@ -108,8 +130,13 @@
       <p>R$ {{ totalPedido | number:'1.2-2' }}</p>
     </span>
 
-    <button type="button" id="finalizar" [disabled]="itensDetalhados.length === 0">
-      Finalizar pedido
+    <button
+      type="button"
+      id="finalizar"
+      [disabled]="itensDetalhados.length === 0 || carregando || finalizando || pedidoFinalizado"
+      (click)="finalizar()"
+    >
+      {{ pedidoFinalizado ? 'Pedido finalizado' : (finalizando ? 'Finalizando...' : 'Finalizar pedido') }}
     </button>
   </div>
 </form>

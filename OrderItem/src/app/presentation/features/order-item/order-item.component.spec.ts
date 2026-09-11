@@ -1,11 +1,13 @@
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 import { PedidoProduto } from '../../../core/domain/pedido-produto.model';
+import { Pedido } from '../../../core/domain/pedido.model';
 import { Produto } from '../../../core/domain/produto.model';
 import { PedidoProdutoService } from '../../../core/services/pedido-produto.service';
+import { PedidoService } from '../../../core/services/pedido.service';
 import { ProdutoService } from '../../../core/services/produto.service';
 import { OrderItemComponent } from './order-item.component';
 
@@ -16,6 +18,15 @@ describe('OrderItemComponent', () => {
   let component: OrderItemComponent;
   let produtoService: jasmine.SpyObj<ProdutoService>;
   let pedidoProdutoService: jasmine.SpyObj<PedidoProdutoService>;
+  let pedidoService: jasmine.SpyObj<PedidoService>;
+  let router: jasmine.SpyObj<Router>;
+
+  const pedido: Pedido = {
+    idpedido: 10,
+    idpessoa: 1,
+    data_pedido: '2026-09-11',
+    status_pedido: 'A',
+  };
 
   const produtos: Produto[] = [
     {
@@ -30,6 +41,7 @@ describe('OrderItemComponent', () => {
   ];
 
   function criarComItens(itens: PedidoProduto[] = []): void {
+    pedidoService.buscarPorId.and.returnValue(of(pedido));
     produtoService.listar.and.returnValue(of(produtos));
     pedidoProdutoService.listarPorPedido.and.returnValue(of(itens));
 
@@ -39,19 +51,29 @@ describe('OrderItemComponent', () => {
   }
 
   beforeEach(async () => {
+    localStorage.clear();
     produtoService = jasmine.createSpyObj<ProdutoService>('ProdutoService', [
       'listar',
     ]);
     pedidoProdutoService = jasmine.createSpyObj<PedidoProdutoService>(
       'PedidoProdutoService',
-      ['listarPorPedido', 'adicionar', 'remover'],
+      ['listarPorPedido', 'adicionar', 'atualizarQuantidade', 'remover'],
     );
+    pedidoService = jasmine.createSpyObj<PedidoService>('PedidoService', [
+      'criar',
+      'buscarPorId',
+      'atualizar',
+    ]);
+    router = jasmine.createSpyObj<Router>('Router', ['navigate']);
+    router.navigate.and.resolveTo(true);
 
     await TestBed.configureTestingModule({
       imports: [OrderItemComponent],
       providers: [
         { provide: ProdutoService, useValue: produtoService },
         { provide: PedidoProdutoService, useValue: pedidoProdutoService },
+        { provide: PedidoService, useValue: pedidoService },
+        { provide: Router, useValue: router },
         {
           provide: ActivatedRoute,
           useValue: {
@@ -61,6 +83,8 @@ describe('OrderItemComponent', () => {
       ],
     }).compileComponents();
   });
+
+  afterEach(() => localStorage.clear());
 
   it('deve carregar e enriquecer os itens', () => {
     criarComItens([
@@ -118,5 +142,66 @@ describe('OrderItemComponent', () => {
     component.remover(7);
 
     expect(pedidoProdutoService.remover).toHaveBeenCalledWith(10, 7);
+  });
+
+  it('deve atualizar a quantidade do item', () => {
+    pedidoProdutoService.atualizarQuantidade.and.returnValue(
+      of({
+        idpedido: 10,
+        idproduto: 7,
+        quantidade: 3,
+        valor_unitario: '299.90',
+      }),
+    );
+    criarComItens([
+      {
+        idpedido: 10,
+        idproduto: 7,
+        quantidade: 2,
+        valor_unitario: '299.90',
+      },
+    ]);
+
+    component.alterarQuantidade(component.itensDetalhados[0], 1);
+
+    expect(pedidoProdutoService.atualizarQuantidade).toHaveBeenCalledWith(10, 7, 3);
+  });
+
+  it('deve finalizar o pedido', () => {
+    pedidoService.atualizar.and.returnValue(
+      of({ ...pedido, status_pedido: 'F' }),
+    );
+    spyOn(window, 'confirm').and.returnValue(true);
+    criarComItens([
+      {
+        idpedido: 10,
+        idproduto: 7,
+        quantidade: 1,
+        valor_unitario: '299.90',
+      },
+    ]);
+
+    component.finalizar();
+
+    expect(pedidoService.atualizar).toHaveBeenCalledWith(10, {
+      status_pedido: 'F',
+    });
+    expect(component.pedidoFinalizado).toBeTrue();
+  });
+
+  it('deve criar um carrinho para uma pessoa existente', () => {
+    pedidoService.criar.and.returnValue(of({ ...pedido, idpedido: 11 }));
+    criarComItens();
+    component.idPessoaNovoPedido = 1;
+
+    component.criarPedido();
+
+    expect(pedidoService.criar).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        idpessoa: 1,
+        status_pedido: 'A',
+      }),
+    );
+    expect(router.navigate).toHaveBeenCalledWith(['/carrinho', 11]);
   });
 });

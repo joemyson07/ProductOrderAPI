@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class PedidoProdutoBase(BaseModel):
@@ -16,9 +16,7 @@ class PedidoProdutoCreate(PedidoProdutoBase):
 
 
 class PedidoProdutoUpdate(BaseModel):
-
-    quantidade: int | None = None
-    valor_unitario: Decimal | None = None
+    quantidade: int = Field(gt=0)
 
 
 class PedidoProdutoResponse(PedidoProdutoBase):
