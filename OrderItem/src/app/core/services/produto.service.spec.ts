@@ -22,7 +22,7 @@ describe('ProdutoService', () => {
     });
 
     service = TestBed.inject(ProdutoService);
-    http: TestBed.inject(HttpTestingController);
+    http = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => http.verify());
