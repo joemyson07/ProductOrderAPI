@@ -53,8 +53,12 @@
               Estoque: {{ produto.estoque }}
             </p>
   
-            <button type="button">
-              ADICIONAR AO CARRINHO
+            <button
+              type="button"
+              [disabled]="produto.estoque < 1 || produtoEmAdicao !== null"
+              (click)="adicionarAoCarrinho(produto)"
+            >
+              {{ produtoEmAdicao === produto.idproduto ? 'ADICIONANDO...' : 'ADICIONAR AO CARRINHO' }}
             </button>
   
           </div>
