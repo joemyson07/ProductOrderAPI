@@ -5,8 +5,6 @@
 }
 
 :root {
-  --primary: #2ecc71;
-  --primary-hover: #27ae60;
   --dark: #17221b;
   --text: #333;
   --light: #ffffff;
@@ -110,10 +108,10 @@
 }
 
 #pesquisa button {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
 
-  background-image: url('/icon/pesquisa.png');
+  background-image: url('../icon/pesquisa.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 22px 22px;
@@ -204,6 +202,16 @@
 
 #carrinho strong:hover {
   color: var(--primary);
+
+}
+
+#btn-carrinho button{
+
+  width: 60px;
+  height: 60px;
+
+  background-image: url('../icon/carrinho.png');
+
 }
 
 /* LISTA DO MENU */
