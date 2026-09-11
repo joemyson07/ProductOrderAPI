@@ -19,8 +19,8 @@
 
   <!-- Adicionar produto -->
   <div class="adicionar-produto">
-    <select formControlName="idproduto" aria-label="Produto">
-      <option [ngValue]="0" disabled>Selecione um produto</option>
+    <select formControlName="idproduto" class="select-idproduto" aria-label="Produto">
+      <option [ngValue]="0" class="option-idproduto" disabled>Selecione um produto</option>
       @for (produto of produtos; track produto.idproduto) {
         <option [ngValue]="produto.idproduto">
           {{ produto.produto }} - R$ {{ +produto.valor_unitario | number:'1.2-2' }}
