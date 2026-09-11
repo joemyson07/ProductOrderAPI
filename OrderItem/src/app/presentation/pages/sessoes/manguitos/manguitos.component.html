@@ -1,1 +1,59 @@
-<p>manguitos works!</p>
+<section class="manguitos">
+
+    <div class="titulo">
+      <h1>Todos os manguitos</h1>
+      <p>Confira todos os nossos manguitos esportivos</p>
+    </div>
+  
+  
+    @if (carregando) {
+  
+      <p class="mensagem">Carregando produtos...</p>
+  
+    }
+  
+  
+    @if (erro) {
+  
+      <p class="mensagem erro">{{ erro }}</p>
+  
+    }
+  
+  
+    @if (!carregando && !erro && produtos.length === 0) {
+  
+      <p class="mensagem">Nenhum produto encontrado.</p>
+  
+    }
+  
+  
+    <div class="lista-produtos">
+  
+        @for (produto of produtos; track produto.idproduto) {
+  
+            <div class="card-produto">
+  
+                <div class="imagem-produto">
+                    <span>Produto</span>
+                </div>
+  
+                    <div class="informacoes">
+  
+                    <h2>{{ produto.produto }}</h2>
+  
+                    <p class="descricao"> {{ produto.descricao_produto }} </p>
+  
+                    <p class="preco"> R$ {{ produto.valor_unitario | number:'1.2-2' }} </p>
+  
+                    <p class="estoque"> Estoque: {{ produto.estoque }} </p>
+  
+                    <button type="button"> Adicionar ao carrinho </button>
+  
+                    </div>
+  
+                </div>
+
+        }
+    </div>
+  
+  </section>
