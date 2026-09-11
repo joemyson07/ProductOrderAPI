@@ -41,6 +41,26 @@
   font-size: 14px;
 }
 
+.select-idproduto{
+  padding: 6px 35px;
+  background-color: #000000;
+  color: white;
+  border: dimgray solid 1.5px;
+  border-radius: 5.5px;
+  margin: 10px 20px;
+}
+
+.option-idproduto{
+  
+}
+
+.adicionar-produto input[type="number"]{
+  margin: 10px 21px;
+  padding: 5px 10px;
+  color: #000000;
+  background-color: #666;
+}
+
 
 .cards {
   width: 100%;
@@ -121,7 +141,7 @@ hr {
   font-weight: 700;
 }
 
-#carrinho button[type="submit"] {
+#carrinho button[type="button"] {
   background-color: black;
   color: white;
   font-size: 16px;
@@ -135,7 +155,7 @@ hr {
   margin-top: 15px;
 }
 
-#carrinho button[type="submit"]:hover {
+#carrinho button[type="button"]:hover {
   background-color: dimgray;
 }
 
