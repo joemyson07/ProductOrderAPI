@@ -1,93 +1,78 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideHttpClient } from '@angular/common/http';
-
-import { PedidoService } from './pedido.service';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { API_BASE_URL } from '../config/api.config';
-import { Pedido } from '../domain/pedido.model';
+import { Pedido, PedidoCreate } from '../domain/pedido.model';
+import { PedidoService } from './pedido.service';
 
 describe('PedidoService', () => {
   let service: PedidoService;
-  let httpTesting: HttpTestingController;
+  let http: HttpTestingController;
 
-  const pedidosDeTeste: Pedido[] = [
-    { idpedido: 1, idpessoa: 10, data_pedido: '2026-09-10', status_pedido: 'P' },
-    { idpedido: 2, idpessoa: 20, data_pedido: '2026-09-10', status_pedido: 'A' }
+  const pedidos: Pedido[] = [
+    {
+      idpedido: 1,
+      idpessoa: 10,
+      data_pedido: '2026-09-10',
+      status_pedido: 'A',
+    },
   ];
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        PedidoService,
         provideHttpClient(),
         provideHttpClientTesting(),
-        { provide: API_BASE_URL, useValue: 'http://localhost:8080' } // URL informada diretamente
-      ]
+        { provide: API_BASE_URL, useValue: '/api' },
+      ],
     });
 
     service = TestBed.inject(PedidoService);
-    httpTesting = TestBed.inject(HttpTestingController);
+    http = TestBed.inject(HttpTestingController);
   });
 
-  afterEach(() => {
-    httpTesting.verify();
+  afterEach(() => http.verify());
+
+  it('deve listar os pedidos', () => {
+    service.listar().subscribe((resultado) => expect(resultado).toEqual(pedidos));
+
+    const request = http.expectOne('/api/pedidos/');
+    expect(request.request.method).toBe('GET');
+    request.flush(pedidos);
   });
 
-  it('deve criar o serviço', () => {
-    expect(service).toBeTruthy();
+  it('deve buscar um pedido por ID', () => {
+    service.buscarPorId(1).subscribe((resultado) => expect(resultado).toEqual(pedidos[0]));
+
+    const request = http.expectOne('/api/pedidos/1');
+    expect(request.request.method).toBe('GET');
+    request.flush(pedidos[0]);
   });
 
-  it('deve listar todos os pedidos (listar)', () => {
-    service.listar().subscribe((pedidos) => {
-      expect(pedidos).toEqual(pedidosDeTeste);
-    });
+  it('deve criar um pedido', () => {
+    const dados: PedidoCreate = {
+      idpessoa: 10,
+      data_pedido: '2026-09-11',
+      status_pedido: 'A',
+    };
 
-    const req = httpTesting.expectOne('http://localhost:8080/pedido');
-    expect(req.request.method).toBe('GET');
-    req.flush(pedidosDeTeste);
+    service.criar(dados).subscribe();
+
+    const request = http.expectOne('/api/pedidos/');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual(dados);
+    request.flush({ idpedido: 2, ...dados }, { status: 201, statusText: 'Created' });
   });
 
-  it('deve buscar um pedido por ID (buscarPorId)', () => {
-    service.buscarPorId(1).subscribe((pedido) => {
-      expect(pedido).toEqual(pedidosDeTeste[0]);
-    });
+  it('deve atualizar o status do pedido', () => {
+    service.atualizar(1, { status_pedido: 'F' }).subscribe();
 
-    const req = httpTesting.expectOne('http://localhost:8080/pedido/1');
-    expect(req.request.method).toBe('GET');
-    req.flush(pedidosDeTeste[0]);
-  });
-
-  describe('dataPedido', () => {
-    it('deve buscar pedidos passando a data como string', () => {
-      service.dataPedido('2026-09-10').subscribe((pedidos) => {
-        expect(pedidos).toEqual(pedidosDeTeste);
-      });
-
-      const req = httpTesting.expectOne('http://localhost:8080/pedido/data/2026-09-10');
-      expect(req.request.method).toBe('GET');
-      req.flush(pedidosDeTeste);
-    });
-
-    it('deve formatar e buscar pedidos passando a data como objeto Date', () => {
-      const dataObj = new Date('2026-09-10T10:00:00Z');
-
-      service.dataPedido(dataObj).subscribe((pedidos) => {
-        expect(pedidos).toEqual(pedidosDeTeste);
-      });
-
-      const req = httpTesting.expectOne('http://localhost:8080/pedido/data/2026-09-10');
-      expect(req.request.method).toBe('GET');
-      req.flush(pedidosDeTeste);
-    });
-  });
-
-  it('deve buscar pedidos por status (statusPedido)', () => {
-    service.statusPedido('P').subscribe((pedidos) => {
-      expect(pedidos.length).toBe(1);
-    });
-
-    const req = httpTesting.expectOne('http://localhost:8080/pedido/status/P');
-    expect(req.request.method).toBe('GET');
-    req.flush([pedidosDeTeste[0]]);
+    const request = http.expectOne('/api/pedidos/1');
+    expect(request.request.method).toBe('PUT');
+    expect(request.request.body).toEqual({ status_pedido: 'F' });
+    request.flush({ ...pedidos[0], status_pedido: 'F' });
   });
 });
