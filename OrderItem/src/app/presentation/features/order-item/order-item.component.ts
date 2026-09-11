@@ -104,7 +104,11 @@ export class OrderItemComponent implements OnInit, OnDestroy {
             this.pedido = pedido;
             this.produtos = produtos;
             this.itens = itens;
-            this.pedidoAtivoService.definir(idPedido);
+            if (pedido.status_pedido === this.statusFinalizado) {
+              this.pedidoAtivoService.limpar();
+            } else {
+              this.pedidoAtivoService.definir(idPedido);
+            }
             this.montarItensDetalhados();
           },
           error: (error: unknown) => {
