@@ -28,7 +28,7 @@ export class CamisetasComponent implements OnInit {
           .subscribe({
     
             next: (dados) => {
-              this.produtos = dados.filter(produtos => produtos.idsetor === 5);
+              this.produtos = dados.filter(produtos => produtos.idsetor === 3);
               this.carregando = false;
             },
     
