@@ -1,12 +1,43 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-equipamentos',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './equipamentos.component.html',
   styleUrl: './equipamentos.component.css'
 })
-export class EquipamentosComponent {
+export class EquipamentosComponent implements OnInit {
 
-}
+    produtos: any[] = [];
+    
+      carregando = true;
+      erro = '';
+    
+      constructor(private http: HttpClient) {}
+    
+      ngOnInit(): void {
+        this.listarProdutos();
+      }
+    
+      listarProdutos(): void {
+    
+        this.http.get<any[]>('http://127.0.0.1:8000/produtos/')
+          .subscribe({
+    
+            next: (dados) => {
+              this.produtos = dados.filter(produtos => produtos.idsetor === 6);
+              this.carregando = false;
+            },
+    
+            error: (erro) => {
+              console.error('Erro ao buscar produtos:', erro);
+              this.erro = 'Não foi possível carregar os produtos.';
+              this.carregando = false;
+            }
+    
+          });
+      }
+  }
